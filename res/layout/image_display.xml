@@ -1,0 +1,17 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+<ScrollView android:layout_height="wrap_content" android:layout_width="match_parent">
+    	<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
+	        <ImageView android:id="@+id/imageAttachment" android:layout_height="wrap_content" android:layout_width="match_parent"  android:layout_margin="13dip"></ImageView>
+	        <TextView 
+	        	android:id="@+id/imageCaption" 
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:gravity="center_vertical|center_horizontal" 
+			    android:padding="10dip"
+			    android:textAppearance="?android:attr/textAppearanceLarge" >
+	    	</TextView>
+	    	
+	    </LinearLayout>
+	</ScrollView>
+	<Button android:layout_height="wrap_content" android:id="@+id/ImageResponse" android:text="Reply" android:layout_width="match_parent" android:layout_gravity="bottom"></Button>
+	</LinearLayout>

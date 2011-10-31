@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+    <EditText
+    android:id="@+id/textContent"
+    android:singleLine="false" 
+    android:lines="12" 
+    android:minLines="10" 
+    android:gravity="top|left" 
+    android:maxLines="14" 
+    android:layout_height="wrap_content" 
+    android:layout_width="fill_parent"
+    android:scrollbars="vertical"
+    android:imeOptions="actionDone"
+	/>
+    <LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		<Button android:text="Post" android:id="@+id/ButtonCreate"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1">
+		</Button>
+		<Button android:text="Attach Image" android:id="@+id/ButtonCamera"
+			android:layout_toRightOf="@+id/ButtonCreate" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:layout_weight="1">
+		</Button>
+	</LinearLayout>
+</LinearLayout>
