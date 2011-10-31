@@ -62,7 +62,7 @@ public class SingleThreadActivity extends Activity {
 			}
 		});
 
-		adapter = new ImageTextAdapter(this, R.layout.list_item_image, responseList);
+		adapter = new ImageTextAdapter(this, R.layout.row, responseList);
 		updateList();
 		lv.setAdapter(adapter);
 	}

@@ -82,7 +82,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 		} catch (Exception e) {
 //			Log.v(TAG, getStackTrace(e));
 		}
-		adapter = new ImageTextAdapter(this, R.layout.list_item_image,
+		adapter = new ImageTextAdapter(this, R.layout.row,
 				threadList);
 		updateList();
 		lv.setAdapter(adapter);
