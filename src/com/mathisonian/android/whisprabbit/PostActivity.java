@@ -30,6 +30,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -77,7 +78,10 @@ public class PostActivity extends Activity {
 		    });
 
 			myImage = (Bitmap) getLastNonConfigurationInstance();
-
+			Intent intent = getIntent();
+			if (!intent.getBooleanExtra("isThread", false)) {
+				((CheckBox) findViewById(R.id.checkBoxPrivate)).setVisibility(View.GONE);
+			}
 		} catch (Exception e) {
 //			Log.v(TAG, getStackTrace(e));
 		}
