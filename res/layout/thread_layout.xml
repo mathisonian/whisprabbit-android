@@ -7,11 +7,12 @@
 		<Button android:text="Post" android:id="@+id/ButtonPostThread"
 			android:layout_width="fill_parent" android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:background="@drawable/list_item_background">
+			android:background="@drawable/search_tags_background">
 		</Button>
 		<Button android:text="Search" android:id="@+id/ButtonSearch"
 			android:layout_toRightOf="@+id/ButtonPostThread" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:layout_weight="1">
+			android:layout_height="wrap_content" android:layout_weight="1"
+			android:background="@drawable/search_tags_background">
 		</Button>
 	</LinearLayout>
 	<ListView android:id="@+id/threadList" android:layout_height="match_parent"
