@@ -17,8 +17,8 @@
 		</activity>
 		<activity android:name=".ImageDisplayActivity"></activity>
 		<activity android:name=".SingleThreadActivity"></activity>
-		<activity android:name=".PostActivity" android:screenOrientation="portrait"></activity>
-		<activity android:name=".SearchActivity"></activity>
+		<activity android:name=".PostActivity" android:screenOrientation="portrait" ></activity>
+		<activity android:name=".SearchActivity" android:windowSoftInputMode="stateUnchanged"></activity>
 
 	</application>
 </manifest>
