@@ -41,6 +41,7 @@ public class PostActivity extends Activity {
 	final int IMAGE_ACTIVITY = 1;
 	Bitmap myImage = null;
 	static final String TAG = "MyActivity";
+	CheckBox checkBox;
 
 	public void onCreate(Bundle savedInstanceState) {
 		try {
@@ -79,8 +80,10 @@ public class PostActivity extends Activity {
 
 			myImage = (Bitmap) getLastNonConfigurationInstance();
 			Intent intent = getIntent();
+			
+			checkBox = (CheckBox) findViewById(R.id.checkBoxPrivate);
 			if (!intent.getBooleanExtra("isThread", false)) {
-				((CheckBox) findViewById(R.id.checkBoxPrivate)).setVisibility(View.GONE);
+				checkBox.setVisibility(View.GONE);
 			}
 		} catch (Exception e) {
 //			Log.v(TAG, getStackTrace(e));
@@ -106,9 +109,14 @@ public class PostActivity extends Activity {
 		Intent intent = getIntent();
 		String t_id = "";
 		String uploadName;
+		String isPrivate = "0";
 		if (intent.getBooleanExtra("isThread", false)) {
 			url += "createThread.php";
 			uploadName = "pictureUpload";
+			if(checkBox.isChecked()) {
+				isPrivate = "1";
+			}
+			
 		} else {
 			url += "createResponse.php";
 			t_id = intent.getStringExtra("t_id");
@@ -139,7 +147,12 @@ public class PostActivity extends Activity {
 				mp.addPart(uploadName, new ByteArrayBody(data, "temp.png"));
 			}
 			mp.addPart("c", new StringBody(myContent, Charset.forName("UTF-8")));
-			mp.addPart("t", new StringBody(t_id, Charset.forName("UTF-8")));
+			
+			if (intent.getBooleanExtra("isThread", false)) {
+				mp.addPart("p", new StringBody(isPrivate, Charset.forName("UTF-8")));				
+			} else {
+				mp.addPart("t", new StringBody(t_id, Charset.forName("UTF-8")));
+			}
 
 			httppost.setEntity(mp);
 
