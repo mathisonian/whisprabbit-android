@@ -32,6 +32,8 @@ import android.widget.TextView;
 public class SingleThreadActivity extends Activity {
 	String server = "http://www.whisprabbit.com";
 	ArrayList<TextPost> responseList;
+	ArrayList<String> responseStrings;
+	ArrayList<String> imageStrings;
 	static final String TAG = "MyActivity";
 	static ProgressDialog dialog = null;
 	static final int POST_RESULTS = 0;
@@ -45,6 +47,8 @@ public class SingleThreadActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.response_layout);
 		responseList = new ArrayList<TextPost>();
+		responseStrings = new ArrayList<String>();
+		imageStrings = new ArrayList<String>();
 
 		lv = (ListView) this.findViewById(R.id.responseList);
 
@@ -90,13 +94,16 @@ public class SingleThreadActivity extends Activity {
 	}
 
 	void viewPost(int i) {
-		Intent intent = new Intent(this, ImageDisplayActivity.class);
-		TextPost thread = responseList.get(i);
-		String url = server + "/uploads/" + thread.getFilename();
-		String caption = thread.getContent();
-		intent.putExtra("URL", url);
-		intent.putExtra("CAPTION", caption);
-		startActivityForResult(intent, IMAGE_RESULTS);
+		Intent intent = new Intent(this, ImageDisplayPagerActivity.class);
+		intent.putExtra("RESPONSES", responseStrings);
+		intent.putExtra("IMAGES", imageStrings);
+//		Intent intent = new Intent(this, ImageDisplayActivity.class);
+//		TextPost thread = responseList.get(i);
+//		String url = server + "/uploads/" + thread.getFilename();
+//		String caption = thread.getContent();
+//		intent.putExtra("URL", url);
+//		intent.putExtra("CAPTION", caption);
+		startActivity(intent);
 	}
 
 	@Override
@@ -171,7 +178,6 @@ public class SingleThreadActivity extends Activity {
 
 				ImageView iv = (ImageView) v.findViewById(R.id.listimage);
 				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
-
 			}
 			return v;
 		}
@@ -207,6 +213,8 @@ public class SingleThreadActivity extends Activity {
 
     			TextPost response = new TextPost(jo.getString("t_id"),jo.getString("content"),getFilename(jo.getString("attach_id")));
     			responseList.add(response);
+    			responseStrings.add(response.getContent());
+    			imageStrings.add(response.getFilename());
 
     			ja = ja.getJSONArray(1);
     			int length = ja.length();
@@ -216,6 +224,8 @@ public class SingleThreadActivity extends Activity {
     						jo.getString("content"),
     						getFilename(jo.getString("attach_id")));
     				responseList.add(response);
+    				responseStrings.add(response.getContent());
+    				imageStrings.add(response.getFilename());
     			}
     			
 

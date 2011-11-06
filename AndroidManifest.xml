@@ -19,6 +19,7 @@
 		<activity android:name=".SingleThreadActivity"></activity>
 		<activity android:name=".PostActivity" android:screenOrientation="portrait" ></activity>
 		<activity android:name=".SearchActivity" android:windowSoftInputMode="stateUnchanged"></activity>
+		<activity android:name=".ImageDisplayPagerActivity"></activity>
 
 	</application>
 </manifest>

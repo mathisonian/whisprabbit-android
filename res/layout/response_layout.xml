@@ -3,13 +3,14 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 	
-	<Button 
-		android:text="Post Response" 
-		android:id="@+id/ButtonPostResponse"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:layout_weight="1"
-		android:layout_alignParentBottom="true"
-		android:background="@drawable/search_tags_background">
+	<Button
+	    android:id="@+id/ButtonPostResponse"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:background="@drawable/search_tags_background"
+	    android:text="Post Response" >
+
 	</Button>
 	
 	<ListView 
