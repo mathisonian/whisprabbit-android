@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 
 public class ImageDisplayPagerActivity extends FragmentActivity {
 
-	static int NUM_ITEMS;
+	static int numItems;
 	static Context context;
 	static ImageDisplayFragment imageDisplayFragment;
 	static String server = "http://www.whisprabbit.com";
@@ -37,7 +38,8 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 		Intent intent = getIntent();
 		responses = intent.getStringArrayListExtra("RESPONSES");
 		images = intent.getStringArrayListExtra("IMAGES");
-		NUM_ITEMS = responses.size();
+		int pos = intent.getIntExtra("POSITION", 0);
+		numItems = responses.size();
 
 		mAdapter = new MyAdapter(getSupportFragmentManager());
 
@@ -45,6 +47,7 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 		mPager.setAdapter(mAdapter);
 		context = this;
 		imageDisplayFragment = new ImageDisplayFragment();
+		mPager.setCurrentItem(pos);
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
@@ -54,7 +57,7 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 
 		@Override
 		public int getCount() {
-			return NUM_ITEMS;
+			return numItems;
 		}
 
 		@Override
@@ -93,10 +96,42 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 			TextView tv = (TextView) v.findViewById(R.id.imageCaption);
 			tv.setText(responses.get(mNum));
 
+			
 			ImageView iv = (ImageView) v.findViewById(R.id.imageAttachment);
-			iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/" + images.get(mNum)));
-
+			setPicture(iv, server + "/uploads/" + images.get(mNum));
+			
 			return v;
 		}
+		
+		private void setPicture(ImageView iv, String url) {
+			new DownloadImageTask(iv).execute(url);
+		}
+		
+		private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+			
+			private ImageView iv;
+			
+			public DownloadImageTask(ImageView imgView) {
+				super();
+				iv = imgView;
+			}
+			
+			/**
+			 * The system calls this to perform work in a worker thread and delivers
+			 * it the parameters given to AsyncTask.execute()
+			 */
+			protected Bitmap doInBackground(String... urls) {
+				return ImageLoader.getBitmap(urls[0]);
+			}
+
+			/**
+			 * The system calls this to perform work in the UI thread and delivers
+			 * the result from doInBackground()
+			 */
+			protected void onPostExecute(Bitmap result) {
+				iv.setImageBitmap(result);
+			}
+		}
 	}
+			
 }

@@ -97,12 +97,7 @@ public class SingleThreadActivity extends Activity {
 		Intent intent = new Intent(this, ImageDisplayPagerActivity.class);
 		intent.putExtra("RESPONSES", responseStrings);
 		intent.putExtra("IMAGES", imageStrings);
-//		Intent intent = new Intent(this, ImageDisplayActivity.class);
-//		TextPost thread = responseList.get(i);
-//		String url = server + "/uploads/" + thread.getFilename();
-//		String caption = thread.getContent();
-//		intent.putExtra("URL", url);
-//		intent.putExtra("CAPTION", caption);
+		intent.putExtra("POSITION", i);
 		startActivity(intent);
 	}
 
