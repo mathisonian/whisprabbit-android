@@ -1,14 +1,11 @@
 package com.mathisonian.android.whisprabbit;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -18,11 +15,13 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 //import android.util.Log;
@@ -42,6 +41,7 @@ public class PostActivity extends Activity {
 	Bitmap myImage = null;
 	static final String TAG = "MyActivity";
 	CheckBox checkBox;
+	static ProgressDialog dialog = null;
 
 	public void onCreate(Bundle savedInstanceState) {
 		try {
@@ -102,7 +102,6 @@ public class PostActivity extends Activity {
 	}
 
 	void createPost() {
-//		Toast.makeText(getApplicationContext(), "WTF", Toast.LENGTH_LONG);
 		EditText editText = (EditText) findViewById(R.id.textContent);
 		String myContent = editText.getText().toString();
 		String url = server + "/php/";
@@ -124,7 +123,6 @@ public class PostActivity extends Activity {
 		}
 
 		// Create a new HttpClient and Post Header
-		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 
 		try {
@@ -155,23 +153,43 @@ public class PostActivity extends Activity {
 			}
 
 			httppost.setEntity(mp);
-
-			// Execute HTTP Post Request
-			HttpResponse response = httpclient.execute(httppost);
-			/*BufferedReader reader =*/ new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent(), "UTF-8"));
-//			Toast.makeText(getApplicationContext(), reader.readLine(),
-//					Toast.LENGTH_SHORT);
-
-			Intent resultIntent = new Intent();
-			resultIntent.putExtra("POST_IDENTIFIER", 1);
-			setResult(Activity.RESULT_OK, resultIntent);
-			finish();
+			dialog = ProgressDialog.show(PostActivity.this, "","Creating post, please wait...", true);
+			new PostTask().execute(httppost);
 
 		} catch (Exception e) {
-//			Log.v(TAG, getStackTrace(e));
-//			Toast.makeText(getApplicationContext(), getStackTrace(e),
-//					Toast.LENGTH_SHORT);
+		}
+	}
+	
+	private class PostTask extends AsyncTask<HttpPost, Void, Boolean> {
+		
+		/**
+		 * The system calls this to perform work in a worker thread and delivers
+		 * it the parameters given to AsyncTask.execute()
+		 * @return 
+		 */
+		protected Boolean doInBackground(HttpPost... httppost) {
+			HttpClient httpclient = new DefaultHttpClient();
+			// Execute HTTP Post Request
+			try {
+				httpclient.execute(httppost[0]);
+			} catch (Exception e) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * The system calls this to perform work in the UI thread and delivers
+		 * the result from doInBackground()
+		 */
+		protected void onPostExecute(Boolean result) {
+			Intent resultIntent = new Intent();
+			resultIntent.putExtra("POST_IDENTIFIER", 1);
+			if(result) {
+				setResult(Activity.RESULT_OK, resultIntent);				
+			}
+			dialog.dismiss();
+			finish();
 		}
 	}
 
