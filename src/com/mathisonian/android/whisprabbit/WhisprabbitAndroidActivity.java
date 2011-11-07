@@ -12,10 +12,12 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.util.Log;
@@ -187,10 +189,46 @@ public class WhisprabbitAndroidActivity extends Activity {
 				}
 
 				ImageView iv = (ImageView) v.findViewById(R.id.listimage);
-				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
+				
+//				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
+				if(o.getFilename() != null) {
+					setPicture(iv, server + "/uploads/mobile/" + o.getFilename());
+				} else {
+					iv.setImageBitmap(null);
+				}
 
 			}
 			return v;
+		}
+	}
+	
+	private void setPicture(ImageView iv, String url) {
+		new DownloadImageTask(iv).execute(url);
+	}
+	
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		
+		private ImageView iv;
+		
+		public DownloadImageTask(ImageView imgView) {
+			super();
+			iv = imgView;
+		}
+		
+		/**
+		 * The system calls this to perform work in a worker thread and delivers
+		 * it the parameters given to AsyncTask.execute()
+		 */
+		protected Bitmap doInBackground(String... urls) {
+			return ImageLoader.getBitmap(urls[0]);
+		}
+
+		/**
+		 * The system calls this to perform work in the UI thread and delivers
+		 * the result from doInBackground()
+		 */
+		protected void onPostExecute(Bitmap result) {
+			iv.setImageBitmap(result);
 		}
 	}
 
@@ -264,10 +302,16 @@ public class WhisprabbitAndroidActivity extends Activity {
 
     			JSONArray ja = new JSONArray(json);
     			int length = ja.length();
+    			TextPost thread;
     			
     			for (int i = 0; i < length; i++) {
     				JSONObject jo = ja.getJSONObject(i);
-    				TextPost thread = new TextPost(jo.getString("t_id"), jo.getString("content").replace("\n", " ").trim() , getFilename(jo.getString("attach_id")));
+    				if(jo.getString("attach_id") != "0") { 
+//    					Toast.makeText(getApplicationContext(), jo.getString("attach_id"), Toast.LENGTH_SHORT).show();
+    					thread = new TextPost(jo.getString("t_id"), jo.getString("content").replace("\n", " ").trim() , getFilename(jo.getString("attach_id")));
+    				} else {
+    					thread = new TextPost(jo.getString("t_id"), jo.getString("content").replace("\n", " ").trim() , null);
+    				}
     				threadList.add(thread);
     			}
     			

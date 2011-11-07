@@ -96,9 +96,8 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 			TextView tv = (TextView) v.findViewById(R.id.imageCaption);
 			tv.setText(responses.get(mNum));
 
-			
 			ImageView iv = (ImageView) v.findViewById(R.id.imageAttachment);
-			setPicture(iv, server + "/uploads/" + images.get(mNum));
+			setPicture(iv, server + "/uploads/" + images.get(mNum));				
 			
 			return v;
 		}

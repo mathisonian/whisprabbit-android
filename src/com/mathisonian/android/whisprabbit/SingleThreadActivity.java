@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -170,13 +171,49 @@ public class SingleThreadActivity extends Activity {
 				if (bt != null) {
 					bt.setText("Status: " + o.getContent());
 				}
-
 				ImageView iv = (ImageView) v.findViewById(R.id.listimage);
-				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
+								
+//				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
+				if(o.getFilename() != null) {
+					setPicture(iv, server + "/uploads/mobile/" + o.getFilename());
+				} else {
+					iv.setImageBitmap(null);
+				}
 			}
 			return v;
 		}
 	}
+	
+	private void setPicture(ImageView iv, String url) {
+		new DownloadImageTask(iv).execute(url);
+	}
+	
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		
+		private ImageView iv;
+		
+		public DownloadImageTask(ImageView imgView) {
+			super();
+			iv = imgView;
+		}
+		
+		/**
+		 * The system calls this to perform work in a worker thread and delivers
+		 * it the parameters given to AsyncTask.execute()
+		 */
+		protected Bitmap doInBackground(String... urls) {
+			return ImageLoader.getBitmap(urls[0]);
+		}
+
+		/**
+		 * The system calls this to perform work in the UI thread and delivers
+		 * the result from doInBackground()
+		 */
+		protected void onPostExecute(Bitmap result) {
+			iv.setImageBitmap(result);
+		}
+	}
+	
 	private class UpdateData extends AsyncTask<String, Void, ArrayList<TextPost>> {
 	    /** The system calls this to perform work in a worker thread and
 	      * delivers it the parameters given to AsyncTask.execute() 
@@ -205,8 +242,13 @@ public class SingleThreadActivity extends Activity {
 
     			JSONArray ja = new JSONArray(json);
     			JSONObject jo = ja.getJSONObject(0);
-
-    			TextPost response = new TextPost(jo.getString("t_id"),jo.getString("content"),getFilename(jo.getString("attach_id")));
+    			
+    			TextPost response;
+    			if(jo.getString("attach_id") == "0") {
+    				response = new TextPost(jo.getString("t_id"),jo.getString("content"),null);
+    			} else {
+    				response = new TextPost(jo.getString("t_id"),jo.getString("content"),getFilename(jo.getString("attach_id")));    				
+    			}
     			responseList.add(response);
     			responseStrings.add(response.getContent());
     			imageStrings.add(response.getFilename());
@@ -215,9 +257,11 @@ public class SingleThreadActivity extends Activity {
     			int length = ja.length();
     			for (int i = 0; i < length; i++) {
     				jo = ja.getJSONObject(i);
-    				response = new TextPost(jo.getString("r_id"),
-    						jo.getString("content"),
-    						getFilename(jo.getString("attach_id")));
+    				if(jo.getString("attach_id") == "0") {
+    					response = new TextPost(jo.getString("r_id"), jo.getString("content"), null);
+    				} else {
+    					response = new TextPost(jo.getString("r_id"), jo.getString("content"), getFilename(jo.getString("attach_id")));
+    				}
     				responseList.add(response);
     				responseStrings.add(response.getContent());
     				imageStrings.add(response.getFilename());
