@@ -99,7 +99,7 @@ public class SingleThreadActivity extends Activity {
 		intent.putExtra("RESPONSES", responseStrings);
 		intent.putExtra("IMAGES", imageStrings);
 		intent.putExtra("POSITION", i);
-		startActivity(intent);
+		startActivityForResult(intent, IMAGE_RESULTS);
 	}
 
 	@Override

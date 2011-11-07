@@ -2,6 +2,7 @@ package com.mathisonian.android.whisprabbit;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,6 +50,20 @@ public class ImageDisplayPagerActivity extends FragmentActivity {
 		context = this;
 		imageDisplayFragment = new ImageDisplayFragment();
 		mPager.setCurrentItem(pos);
+		
+		final Button button = (Button) findViewById(R.id.ImageResponse);
+		button.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				createResponse();
+			}
+		});
+	}
+	
+	public void createResponse() {
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra("isPost", true);
+		setResult(Activity.RESULT_OK, resultIntent);
+		finish();
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
