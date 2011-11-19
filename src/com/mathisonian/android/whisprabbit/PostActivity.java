@@ -18,8 +18,10 @@ import com.urbanairship.push.PushManager;
 import com.urbanairship.push.PushPreferences;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -87,6 +89,30 @@ public class PostActivity extends Activity {
 			if (!intent.getBooleanExtra("isThread", false)) {
 				checkBox.setVisibility(View.GONE);
 			}
+			
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("Invite");
+			alert.setMessage("Enter a @twitterHandle or email address");
+
+			// Set an EditText view to get user input 
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			  String value = input.getText().toString();
+			  // Do something with value!
+			  }
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+			  }
+			});
+
+//			alert.show();
 		} catch (Exception e) {
 //			Log.v(TAG, getStackTrace(e));
 		}
