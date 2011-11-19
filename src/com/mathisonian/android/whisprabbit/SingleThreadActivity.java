@@ -73,7 +73,7 @@ public class SingleThreadActivity extends Activity {
 	}
 
 	void updateList() {
-		dialog = ProgressDialog.show(this, "","Loading. Please wait...", true);
+		dialog = ProgressDialog.show(this, "","Loading. Please wait...", true, true);
 		new UpdateData().execute();
 	}
 

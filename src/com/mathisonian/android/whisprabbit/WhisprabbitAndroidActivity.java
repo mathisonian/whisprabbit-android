@@ -91,7 +91,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 	}
 
 	void updateList() {
-		dialog = ProgressDialog.show(WhisprabbitAndroidActivity.this, "","Loading. Please wait...", true);
+		dialog = ProgressDialog.show(WhisprabbitAndroidActivity.this, "","Loading. Please wait...", true, true);
 		new UpdateData().execute();
 	}
 

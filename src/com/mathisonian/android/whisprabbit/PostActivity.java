@@ -14,6 +14,9 @@ import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.urbanairship.push.PushManager;
+import com.urbanairship.push.PushPreferences;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -150,9 +153,12 @@ public class PostActivity extends Activity {
 			} else {
 				mp.addPart("t", new StringBody(t_id, Charset.forName("UTF-8")));
 			}
+	        
+			PushPreferences prefs = PushManager.shared().getPreferences();
+			mp.addPart("a", new StringBody(prefs.getPushId(), Charset.forName("UTF-8")));
 
 			httppost.setEntity(mp);
-			dialog = ProgressDialog.show(PostActivity.this, "","Creating post, please wait...", true);
+			dialog = ProgressDialog.show(PostActivity.this, "","Creating post, please wait...", true, true);
 			new PostTask().execute(httppost);
 
 		} catch (Exception e) {
