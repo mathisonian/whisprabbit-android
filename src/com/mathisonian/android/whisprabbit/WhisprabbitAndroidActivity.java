@@ -49,8 +49,9 @@ public class WhisprabbitAndroidActivity extends Activity {
 	static final int POST_RESULTS = 0;
 	static final int SEARCH_RESULTS = 1;
 	static String searchTerm = "";
-	int curPage=0;
-
+	private int curPage = 0;
+	private int rowsToLoad = 12;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -79,13 +80,6 @@ public class WhisprabbitAndroidActivity extends Activity {
 				search();
 			}
 		});
-		
-		final Button buttonLoadMore = (Button) findViewById(R.id.ButtonLoadMore);
-		buttonLoadMore.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				loadMore();
-			}
-		});
 
 		threadList = new ArrayList<TextPost>();
 		adapter = new ImageTextAdapter(this, R.layout.row, threadList);
@@ -96,10 +90,19 @@ public class WhisprabbitAndroidActivity extends Activity {
 		lv.addFooterView(footerView);
 
 		lv.setAdapter(adapter);
+		
+		final Button buttonLoadMore = (Button) findViewById(R.id.ButtonLoadMore);
+		buttonLoadMore.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				loadMore();
+			}
+		});
 	}
-	
+
 	void loadMore() {
-		// TODO: Implement Me
+		dialog = ProgressDialog.show(WhisprabbitAndroidActivity.this, "",
+				"Loading. Please wait...", true, true);
+		new AppendData().execute();
 	}
 
 	void updateList() {
@@ -365,75 +368,77 @@ public class WhisprabbitAndroidActivity extends Activity {
 			dialog.dismiss();
 		}
 	}
-	
+
 	private class AppendData extends
-	AsyncTask<String, Void, ArrayList<TextPost>> {
-/**
- * The system calls this to perform work in a worker thread and delivers
- * it the parameters given to AsyncTask.execute()
- * 
- * @return
- */
-protected ArrayList<TextPost> doInBackground(String... params) {
-	ArrayList<TextPost> threadList = new ArrayList<TextPost>();
-	curPage++;
-	try {
-		// Log.v(TAG,"in updatethread");
-		String urlString = server + "/php/getThreads.php?s=" + sortBy
-				+ "&n=12";
-		urlString += "&q=" + searchTerm;
-		urlString += "&p=" + curPage;
-		URL url = new URL(urlString);
-		URLConnection urlConnection = url.openConnection();
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				urlConnection.getInputStream()));
+			AsyncTask<String, Void, ArrayList<TextPost>> {
+		/**
+		 * The system calls this to perform work in a worker thread and delivers
+		 * it the parameters given to AsyncTask.execute()
+		 * 
+		 * @return
+		 */
+		protected ArrayList<TextPost> doInBackground(String... params) {
+			ArrayList<TextPost> threadList = new ArrayList<TextPost>();
+			curPage++;
+			try {
+				// Log.v(TAG,"in updatethread");
+				String urlString = server + "/php/getThreads.php?";
+				urlString += "s=" + sortBy;				
+				urlString += "&n=" + rowsToLoad;
+				urlString += "&q=" + searchTerm;
+				urlString += "&p=" + (curPage*rowsToLoad);
+				
+				URL url = new URL(urlString);
+				URLConnection urlConnection = url.openConnection();
+				BufferedReader in = new BufferedReader(new InputStreamReader(
+						urlConnection.getInputStream()));
 
-		String json = "";
-		String line;
-		while ((line = in.readLine()) != null) {
-			json += line;
-		}
+				String json = "";
+				String line;
+				while ((line = in.readLine()) != null) {
+					json += line;
+				}
 
-		JSONArray ja = new JSONArray(json);
-		int length = ja.length();
-		TextPost thread;
+				JSONArray ja = new JSONArray(json);
+				int length = ja.length();
+				TextPost thread;
 
-		for (int i = 0; i < length; i++) {
-			JSONObject jo = ja.getJSONObject(i);
-			if (jo.getString("attach_id") != "0") {
-				// Toast.makeText(getApplicationContext(),
-				// jo.getString("attach_id"),
-				// Toast.LENGTH_SHORT).show();
-				thread = new TextPost(jo.getString("t_id"),
-						jo.getString("content").replace("\n", " ")
-								.trim(),
-						getFilename(jo.getString("attach_id")));
-			} else {
-				thread = new TextPost(jo.getString("t_id"),
-						jo.getString("content").replace("\n", " ")
-								.trim(), null);
+				for (int i = 0; i < length; i++) {
+					JSONObject jo = ja.getJSONObject(i);
+					if (jo.getString("attach_id") != "0") {
+						// Toast.makeText(getApplicationContext(),
+						// jo.getString("attach_id"),
+						// Toast.LENGTH_SHORT).show();
+						thread = new TextPost(jo.getString("t_id"),
+								jo.getString("content").replace("\n", " ")
+										.trim(),
+								getFilename(jo.getString("attach_id")));
+					} else {
+						thread = new TextPost(jo.getString("t_id"),
+								jo.getString("content").replace("\n", " ")
+										.trim(), null);
+					}
+					threadList.add(thread);
+				}
+
+			} catch (Exception e) {
+				// Log.v(TAG, WhisprabbitAndroidActivity.getStackTrace(e));
 			}
-			threadList.add(thread);
+			return threadList;
+
 		}
 
-	} catch (Exception e) {
-		// Log.v(TAG, WhisprabbitAndroidActivity.getStackTrace(e));
+		/**
+		 * The system calls this to perform work in the UI thread and delivers
+		 * the result from doInBackground()
+		 */
+		protected void onPostExecute(ArrayList<TextPost> threadList) {
+			int length = threadList.size();
+			for (int i = 0; i < length; i++) {
+				adapter.add(threadList.get(i));
+			}
+			adapter.notifyDataSetChanged();
+			dialog.dismiss();
+		}
 	}
-	return threadList;
-
-}
-
-/**
- * The system calls this to perform work in the UI thread and delivers
- * the result from doInBackground()
- */
-protected void onPostExecute(ArrayList<TextPost> threadList) {
-	int length = threadList.size();
-	for (int i = 0; i < length; i++) {
-		adapter.add(threadList.get(i));
-	}
-	adapter.notifyDataSetChanged();
-	dialog.dismiss();
-}
-}
 }
