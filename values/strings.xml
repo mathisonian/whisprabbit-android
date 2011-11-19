@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">whisprabbit</string>
-    <string name="refresh">Refresh</string>
-    <string name="sort">Sort</string>
-    <string name="sort_new">New</string>
-    <string name="sort_top">Top</string>
-    <string name="sort_popular">Popular</string>
-</resources>
