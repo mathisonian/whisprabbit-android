@@ -66,7 +66,6 @@ public class PostActivity extends Activity {
 			
 			final EditText editText = (EditText) findViewById(R.id.textContent);
 			editText.setOnEditorActionListener(new OnEditorActionListener() {
-		        @Override
 		        public boolean onEditorAction(TextView v, int actionId,
 		                KeyEvent event) {
 		            if (event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {

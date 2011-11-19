@@ -3,11 +3,18 @@
 	package="com.mathisonian.android.whisprabbit" android:versionCode="3"
 	android:versionName="1.1.1">
 	<uses-sdk android:minSdkVersion="10" />
-	<uses-permission android:name="android.permission.INTERNET" />
+	
+	<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.CAMERA" />
+	
 	<uses-feature android:name="android.hardware.camera" />
 	<uses-feature android:name="android.hardware.camera.autofocus" />
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
+	<application android:name=".WhisprabbitApplication" android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name=".WhisprabbitAndroidActivity"
 			android:label="@string/app_name">
 			<intent-filter>
@@ -20,6 +27,20 @@
 		<activity android:name=".PostActivity" android:screenOrientation="portrait" ></activity>
 		<activity android:name=".SearchActivity" android:windowSoftInputMode="stateUnchanged"></activity>
 		<activity android:name=".ImageDisplayPagerActivity"></activity>
-
+		
+        <receiver android:name="com.urbanairship.CoreReceiver">
+            <!-- REQUIRED IntentFilter - For Helium and Hybrid -->
+            <intent-filter>
+              <action android:name="android.intent.action.BOOT_COMPLETED" />
+              <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+            </intent-filter>
+        </receiver>
+		
+        <!-- The 'android:process' parameter is optional. Set it to a value starting
+            with a colon (:) to make it run in a separate,
+            private process -->
+        <service android:name="com.urbanairship.push.PushService"
+                android:process=":com.urbanairship.push.process"/>
+            
 	</application>
 </manifest>
