@@ -42,5 +42,9 @@
         <service android:name="com.urbanairship.push.PushService"
                 android:process=":com.urbanairship.push.process"/>
             
+        <!-- OPTIONAL, if you want to receive push, push opened and registration completed intents -->
+        <!-- Replace the receiver below with your package and class name -->
+        <receiver android:name="com.mathisonian.android.whisprabbit.IntentReceiver" />
+        
 	</application>
 </manifest>
