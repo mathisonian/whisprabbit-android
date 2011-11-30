@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    	android:key="whisprabbitPrefs">
+        <PreferenceCategory android:title="whisprabbit Preferences">
+                <CheckBoxPreference
+                        android:title="Push Notifications"
+                        android:defaultValue="false"
+                        android:summary="Enable or disable push notifications"
+                        android:key="pushPref" />
+                
+        </PreferenceCategory>
+        <PreferenceCategory android:title="Threads">
+            <ListPreference
+                        android:title="Default Sort Method"
+                        android:summary="Change the default sort"
+                        android:key="sortPref"
+                        android:defaultValue="@string/sort_new"
+                        android:entries="@array/sortArray"
+                        android:entryValues="@array/sortValues" />
+        	<EditTextPreference
+                android:name="Threads to load"
+                android:summary="Change the default number of threads to load"
+                android:defaultValue="12"
+                 android:numeric="integer"
+                android:title="Threads to load"
+                android:key="threadLoadPref" />
+        </PreferenceCategory>
+</PreferenceScreen>

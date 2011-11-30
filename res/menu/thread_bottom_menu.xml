@@ -15,7 +15,10 @@
               android:title="@string/sort_top" />
              <item android:id="@+id/sort_popular"
               android:title="@string/sort_popular" />
-    </group>
-        	</menu>
-        </item>
+    		</group>
+        </menu>
+	</item>
+	<item android:id="@+id/settings"
+          android:icon="@drawable/ic_menu_settings"
+          android:title="@string/settings" />
 </menu>

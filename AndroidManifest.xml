@@ -27,7 +27,7 @@
 		<activity android:name=".PostActivity" android:screenOrientation="portrait" ></activity>
 		<activity android:name=".SearchActivity" android:windowSoftInputMode="stateUnchanged"></activity>
 		<activity android:name=".ImageDisplayPagerActivity"></activity>
-		
+		<activity android:name=".Settings" />
         <receiver android:name="com.urbanairship.CoreReceiver">
             <!-- REQUIRED IntentFilter - For Helium and Hybrid -->
             <intent-filter>

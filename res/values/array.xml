@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<array name="sortArray">
+		<item>@string/sort_new</item>
+		<item>@string/sort_top</item>
+		<item>@string/sort_popular</item>
+	</array>
+	<array name="sortValues">
+	    <item>new</item>
+	    <item>top</item>
+	    <item>magic</item>
+	</array>
+    
+</resources>

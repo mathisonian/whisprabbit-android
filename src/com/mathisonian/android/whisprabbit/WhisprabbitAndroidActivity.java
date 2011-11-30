@@ -16,10 +16,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.util.Log;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,19 +30,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
 //import android.widget.Toast;
 
 public class WhisprabbitAndroidActivity extends Activity {
-
+	
 	String server = "http://www.whisprabbit.com";
 	String sortBy = "new";
+	public static final String PREFS_NAME = "whisprabbitPrefs";
 	ArrayList<TextPost> threadList;
 	static final String TAG = "MyActivity";
 	static ProgressDialog dialog = null;
@@ -52,11 +55,16 @@ public class WhisprabbitAndroidActivity extends Activity {
 	private int curPage = 0;
 	private int rowsToLoad = 12;
 	
+	
+	
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getPrefs();
 		setContentView(R.layout.thread_layout);
+		
 
 		lv = (ListView) this.findViewById(R.id.threadList);
 
@@ -83,7 +91,9 @@ public class WhisprabbitAndroidActivity extends Activity {
 
 		threadList = new ArrayList<TextPost>();
 		adapter = new ImageTextAdapter(this, R.layout.row, threadList);
-		updateList();
+		
+		getPrefs();
+		updateList(); //right here, remove this
 
 		View footerView = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 				.inflate(R.layout.load_more, null, false);
@@ -98,7 +108,39 @@ public class WhisprabbitAndroidActivity extends Activity {
 			}
 		});
 	}
-
+/*
+	public void onStart(){
+		super.onStart();
+		Log.v(TAG,"onStart");
+		
+		updateList(); //do we want to refresh every time? probably
+		//remove update list from onCreate?
+	}*/
+	
+	void getPrefs() {
+		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
+		//boolean pushNotifications = prefs.getBoolean("pushPref", true);
+		sortBy = prefs.getString("sortPref", "new");
+		Log.v(TAG,"pref load sort: "+sortBy);
+		if(sortBy.compareTo("new")==0){
+			Log.v(TAG,"set new");
+			//((MenuItem) findViewById(R.id.sort_new)).setChecked(true);
+		}
+		else if (sortBy.compareTo("top")==0){
+			Log.v(TAG,"set top");
+			//((MenuItem) findViewById(R.id.sort_top)).setChecked(true);
+		}
+		else if (sortBy.compareTo("magic")==0){
+			Log.v(TAG,"set popular");
+			//((MenuItem) findViewById(R.id.sort_popular)).setChecked(true);
+		}
+		
+		
+		
+		rowsToLoad = Integer.valueOf(prefs.getString("threadLoadPref", "12"));
+		//Log.v(TAG,"pref load threads: "+rowsToLoad);
+	}
+	
 	void loadMore() {
 		dialog = ProgressDialog.show(WhisprabbitAndroidActivity.this, "",
 				"Loading. Please wait...", true, true);
@@ -294,6 +336,10 @@ public class WhisprabbitAndroidActivity extends Activity {
 
 			// Log.v(TAG,"sort_popular");
 			return true;
+		case R.id.settings:
+			Intent settingsActivity = new Intent(this, Settings.class);
+			startActivity(settingsActivity);
+			getPrefs();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -312,7 +358,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 			try {
 				// Log.v(TAG,"in updatethread");
 				String urlString = server + "/php/getThreads.php?s=" + sortBy
-						+ "&n=12";
+						+ "&n=" + rowsToLoad;
 				urlString += "&q=" + searchTerm;
 				URL url = new URL(urlString);
 				URLConnection urlConnection = url.openConnection();
