@@ -177,7 +177,7 @@ public class SingleThreadActivity extends Activity {
 				if(o.getFilename() != null) {
 					setPicture(iv, server + "/uploads/mobile/" + o.getFilename());
 				} else {
-					iv.setImageBitmap(null);
+//					iv.setImageBitmap(null);
 				}
 			}
 			return v;
