@@ -8,8 +8,9 @@
 	    android:id="@+id/ButtonLoadMore"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:background="@drawable/list_item_background"
-	    android:text="Load More" >
+	    android:background="@drawable/load_more_background"
+	    android:text="Load More"
+	    android:textColor="#FFFFFF" >
 
 	</Button>
 	

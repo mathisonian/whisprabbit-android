@@ -14,9 +14,6 @@ import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.urbanairship.push.PushManager;
-import com.urbanairship.push.PushPreferences;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -29,16 +26,18 @@ import android.graphics.Matrix;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-//import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-//import android.widget.Toast;
+
+import com.urbanairship.push.PushManager;
+import com.urbanairship.push.PushPreferences;
 
 public class PostActivity extends Activity {
 	String server = "http://www.whisprabbit.com";
@@ -47,6 +46,7 @@ public class PostActivity extends Activity {
 	static final String TAG = "MyActivity";
 	CheckBox checkBox;
 	static ProgressDialog dialog = null;
+	String imgURL = "";
 
 	public void onCreate(Bundle savedInstanceState) {
 		try {
@@ -69,6 +69,8 @@ public class PostActivity extends Activity {
 				}
 			});
 			
+
+			
 			final EditText editText = (EditText) findViewById(R.id.textContent);
 			editText.setOnEditorActionListener(new OnEditorActionListener() {
 		        public boolean onEditorAction(TextView v, int actionId,
@@ -90,29 +92,71 @@ public class PostActivity extends Activity {
 				checkBox.setVisibility(View.GONE);
 			}
 			
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			final AlertDialog.Builder inviteAlert = new AlertDialog.Builder(this);
 
-			alert.setTitle("Invite");
-			alert.setMessage("Enter a @twitterHandle or email address");
+			inviteAlert.setTitle("Invite");
+			inviteAlert.setMessage("Enter @twitterHandle or email address\nex:\n\"@whisprabbit, dev@whisprabbit.com\"");
 
 			// Set an EditText view to get user input 
 			final EditText input = new EditText(this);
-			alert.setView(input);
+			inviteAlert.setView(input);
 
-			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			inviteAlert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-			  //String value = input.getText().toString();
-			  // Do something with value!
+				String value = input.getText().toString();
+				String[] names = value.split("[ ,]");
+				for(String name : names) {
+					EditText editText = (EditText) findViewById(R.id.textContent);
+					editText.setText( editText.getText() + " inv:" + name);					
+				}
 			  }
 			});
 
-			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			inviteAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			  public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
+			  }
+			});
+			
+			final AlertDialog inviteDialog = inviteAlert.create();
+			
+			final AlertDialog.Builder urlAlert = new AlertDialog.Builder(this);
+
+			urlAlert.setTitle("Image from URL");
+			urlAlert.setMessage("Enter image url");
+
+			// Set an EditText view to get user input 
+			final EditText urlinput = new EditText(this);
+			urlAlert.setView(urlinput );
+
+			urlAlert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				imgURL = urlinput.getText().toString();
 			  }
 			});
 
-//			alert.show();
+			urlAlert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			  public void onClick(DialogInterface dialog, int whichButton) {
+			  }
+			});
+			
+			final AlertDialog urlDialog = urlAlert.create();
+			// Title for AlertDialog
+			urlDialog.setTitle("Invite");
+			
+			Button inviteButton = (Button) findViewById(R.id.ButtonInvite);
+			inviteButton.setOnClickListener(new OnClickListener() {
+			    public void onClick(View v) {
+			    		inviteDialog.show();
+			    }
+			});
+			
+			Button urlButton = (Button) findViewById(R.id.ButtonImageURL);
+			urlButton.setOnClickListener(new OnClickListener() {
+			    public void onClick(View v) {
+			    	urlDialog.show();
+			    }
+			});
+
 		} catch (Exception e) {
 //			Log.v(TAG, getStackTrace(e));
 		}
@@ -182,6 +226,7 @@ public class PostActivity extends Activity {
 	        
 			PushPreferences prefs = PushManager.shared().getPreferences();
 			mp.addPart("a", new StringBody(prefs.getPushId(), Charset.forName("UTF-8")));
+			mp.addPart("u", new StringBody(imgURL, Charset.forName("UTF-8")));
 
 			httppost.setEntity(mp);
 			dialog = ProgressDialog.show(PostActivity.this, "","Creating post, please wait...", true, true);

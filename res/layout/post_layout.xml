@@ -7,10 +7,36 @@
     android:weightSum="1" >
 
     <LinearLayout
-        android:id="@+id/PostButtonLayout"
+        android:id="@+id/PostButtonLayoutAdditions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/ButtonImageURL"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/post_buttons_background"
+            android:text="Image from URL" >
+        </Button>
+
+        <Button
+            android:id="@+id/ButtonCamera"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/ButtonImageURL"
+            android:layout_weight="1"
+            android:background="@drawable/post_buttons_background"
+            android:text="Attach Image" >
+        </Button>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/PostButtonLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/PostButtonLayoutAdditions"
         android:orientation="horizontal" >
 
         <Button
@@ -18,18 +44,19 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/search_tags_background"
+            android:background="@drawable/post_background"
+            android:textColor="#FFFFFF"
             android:text="Post" >
         </Button>
 
         <Button
-            android:id="@+id/ButtonCamera"
+            android:id="@+id/ButtonInvite"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/ButtonCreate"
             android:layout_weight="1"
-            android:background="@drawable/search_tags_background"
-            android:text="Attach Image" >
+            android:background="@drawable/post_buttons_background"
+            android:text="Invite" >
         </Button>
     </LinearLayout>
 

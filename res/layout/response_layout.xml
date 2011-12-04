@@ -8,7 +8,8 @@
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentBottom="true"
-	    android:background="@drawable/search_tags_background"
+	    android:background="@drawable/post_background"
+	    android:textColor="#FFFFFF"
 	    android:text="Post Response" >
 
 	</Button>
