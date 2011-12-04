@@ -251,11 +251,11 @@ public class WhisprabbitAndroidActivity extends Activity {
 
 				// iv.setImageBitmap(ImageLoader.getBitmap(server +
 				// "/uploads/mobile/" + o.getFilename()));
-				if (o.getFilename() != null) {
+				if (o.getFilename() != null ) {
 					setPicture(iv,
 							server + "/uploads/mobile/" + o.getFilename());
 				} else {
-					iv.setImageBitmap(null);
+//					iv.setImageBitmap(null);
 				}
 
 			}
