@@ -13,7 +13,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -173,11 +175,12 @@ public class SingleThreadActivity extends Activity {
 				}
 				ImageView iv = (ImageView) v.findViewById(R.id.listimage);
 								
-//				iv.setImageBitmap(ImageLoader.getBitmap(server + "/uploads/mobile/" + o.getFilename()));
 				if(o.getFilename() != null) {
 					setPicture(iv, server + "/uploads/mobile/" + o.getFilename());
 				} else {
-//					iv.setImageBitmap(null);
+					Resources res = getResources();
+					Drawable drawable = res.getDrawable(R.drawable.wrr);
+					iv.setImageDrawable(drawable);
 				}
 			}
 			return v;

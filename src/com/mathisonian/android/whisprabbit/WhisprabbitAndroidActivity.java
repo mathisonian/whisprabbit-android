@@ -17,7 +17,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -255,7 +257,9 @@ public class WhisprabbitAndroidActivity extends Activity {
 					setPicture(iv,
 							server + "/uploads/mobile/" + o.getFilename());
 				} else {
-//					iv.setImageBitmap(null);
+					Resources res = getResources();
+					Drawable drawable = res.getDrawable(R.drawable.wrr);
+					iv.setImageDrawable(drawable);
 				}
 
 			}
