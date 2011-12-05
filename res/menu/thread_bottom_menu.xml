@@ -9,12 +9,11 @@
           <menu>
             <group android:checkableBehavior="single">
         	<item android:id="@+id/sort_new"
-              android:title="@string/sort_new"
-              android:checked="true" />
+              android:title="@string/sort_new" />
         	<item android:id="@+id/sort_top"
               android:title="@string/sort_top" />
-             <item android:id="@+id/sort_popular"
-              android:title="@string/sort_popular" />
+             <!--  <item android:id="@+id/sort_popular"
+              android:title="@string/sort_popular" /> -->
     		</group>
         </menu>
 	</item>

@@ -39,6 +39,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.urbanairship.push.PushManager;
+
 //import android.widget.Toast;
 
 public class WhisprabbitAndroidActivity extends Activity {
@@ -53,6 +55,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 	ImageTextAdapter adapter;
 	static final int POST_RESULTS = 0;
 	static final int SEARCH_RESULTS = 1;
+	static final int SETTINGS_RESULTS = 2;
 	static String searchTerm = "";
 	private int curPage = 0;
 	private int rowsToLoad = 12;
@@ -64,7 +67,6 @@ public class WhisprabbitAndroidActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getPrefs();
 		setContentView(R.layout.thread_layout);
 		
 
@@ -121,8 +123,20 @@ public class WhisprabbitAndroidActivity extends Activity {
 	
 	void getPrefs() {
 		SharedPreferences prefs =  PreferenceManager.getDefaultSharedPreferences(this);
-		//boolean pushNotifications = prefs.getBoolean("pushPref", true);
+		boolean pushNotifications = prefs.getBoolean("pushPref", true);
+		if(pushNotifications) {
+			PushManager.enablePush();
+			Log.v(TAG,"enable push");
+		}
+		else {
+			PushManager.disablePush();
+			Log.v(TAG,"disable push");
+		}
+		
+		
 		sortBy = prefs.getString("sortPref", "new");
+		
+		/*
 		Log.v(TAG,"pref load sort: "+sortBy);
 		if(sortBy.compareTo("new")==0){
 			Log.v(TAG,"set new");
@@ -136,7 +150,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 			Log.v(TAG,"set popular");
 			//((MenuItem) findViewById(R.id.sort_popular)).setChecked(true);
 		}
-		
+		*/
 		
 		
 		rowsToLoad = Integer.valueOf(prefs.getString("threadLoadPref", "12"));
@@ -205,6 +219,10 @@ public class WhisprabbitAndroidActivity extends Activity {
 				// Toast.LENGTH_SHORT).show();
 				updateList();
 			}
+			break;
+		case (SETTINGS_RESULTS):
+			getPrefs();
+			Log.v(TAG,"settings result");
 			break;
 		}
 	}
@@ -333,6 +351,7 @@ public class WhisprabbitAndroidActivity extends Activity {
 			// Log.v(TAG,"sort_top");
 
 			return true;
+			/*
 		case R.id.sort_popular:
 			item.setChecked(true);
 			sortBy = "magic";
@@ -340,10 +359,11 @@ public class WhisprabbitAndroidActivity extends Activity {
 
 			// Log.v(TAG,"sort_popular");
 			return true;
+			*/
 		case R.id.settings:
 			Intent settingsActivity = new Intent(this, Settings.class);
-			startActivity(settingsActivity);
-			getPrefs();
+			startActivityForResult(settingsActivity, SETTINGS_RESULTS);
+			
 		default:
 			return super.onOptionsItemSelected(item);
 		}

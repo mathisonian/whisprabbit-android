@@ -9,7 +9,7 @@ public class WhisprabbitApplication extends Application {
 	@Override
     public void onCreate() {
         UAirship.takeOff(this);
-        PushManager.enablePush();
+        //PushManager.enablePush();
         PushManager.shared().setIntentReceiver(IntentReceiver.class);
     }
 }

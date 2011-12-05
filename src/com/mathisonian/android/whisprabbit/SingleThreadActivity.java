@@ -227,7 +227,7 @@ public class SingleThreadActivity extends Activity {
     		
     		try {
     			Intent intent = getIntent();
-    			String urlString = server + "/php/getResponses.php?n=20&t="
+    			String urlString = server + "/php/getResponses.php?t="
     					+ intent.getStringExtra("t_id");
     			if (intent.hasExtra("query")) {
     				urlString += intent.getStringExtra("query");
