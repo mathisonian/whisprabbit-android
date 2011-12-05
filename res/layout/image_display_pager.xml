@@ -9,7 +9,8 @@
 			android:layout_height="wrap_content" 
 			android:id="@+id/ImageResponse"
 			android:text="Reply" android:layout_width="match_parent"
-			android:background="@drawable/search_tags_background"
+			android:background="@drawable/post_background"
+			android:textColor="#FFFFFF"
 			android:layout_alignParentBottom="true"
 		/>
     		
